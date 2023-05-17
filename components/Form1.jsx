@@ -1,12 +1,25 @@
-import { useState, useEffect } from 'react';
-import { usePrepareContractWrite, useContractWrite, useAccount } from 'wagmi';
+import { useState } from 'react';
+import {
+	usePrepareContractWrite,
+	useContractWrite,
+	useContractEvent,
+} from 'wagmi';
 import { TOKEN_ABI, BIZ_TOKEN_ADDRESS } from '../constant';
 import Loader from './Loader';
 
-const Form1 = ({ fetchStr, description }) => {
-	const { address } = useAccount();
+const Form1 = () => {
 	const [inputVal, setInputVal] = useState('');
 	const [loading, setLoading] = useState(false);
+
+	useContractEvent({
+		address: BIZ_TOKEN_ADDRESS,
+		abi: TOKEN_ABI,
+		eventName: 'TokensRequested',
+		chainId: 80001,
+		listener(receipent, value) {
+			alert('Tokens received successfully');
+		},
+	});
 
 	const { config, isLoading } = usePrepareContractWrite({
 		address: BIZ_TOKEN_ADDRESS,

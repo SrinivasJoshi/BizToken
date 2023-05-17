@@ -1,12 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAccount, useContractRead } from 'wagmi';
 import { TOKEN_ABI, BIZ_TOKEN_ADDRESS } from '../constant';
-import Loader from './Loader';
 
-const Form2 = ({ fetchStr, description }) => {
-	const { address } = useAccount();
-	const [inputVal, setInputVal] = useState(address | '');
-	const [loading, setLoading] = useState(false);
+const Form2 = () => {
+	const [inputVal, setInputVal] = useState('');
 	const [answer, setAnswer] = useState(null);
 
 	const { data } = useContractRead({
@@ -15,23 +12,21 @@ const Form2 = ({ fetchStr, description }) => {
 		functionName: 'balanceOf',
 		args: [inputVal],
 		chainId: 80001,
+		onError: (error) => {
+			if (error.reason !== 'resolver or addr is not configured for ENS name') {
+				alert('yo' + error.reason);
+				setInputVal('');
+			}
+		},
 	});
 
 	const submitForm = () => {
-		if (inputVal.lenght === 0) {
+		if (inputVal.length === 0) {
 			alert('Please enter a valid wallet address');
 			return;
 		}
-		setLoading(true);
 		setAnswer(Number(data));
-		setLoading(false);
 	};
-
-	useEffect(() => {
-		if (loading) {
-			console.log('check');
-		}
-	}, [loading]);
 
 	return (
 		<div className='flex flex-col items-left mx-5 my-4 md:my-0 basis-2'>
@@ -48,8 +43,7 @@ const Form2 = ({ fetchStr, description }) => {
 
 			<button
 				className='shadow-md md:shadow-lg shadow-blue-700 rounded-lg my-3 border border-blue-700 w-36 p-2 disabled:cursor-not-allowed'
-				onClick={submitForm}
-				disabled={loading}>
+				onClick={submitForm}>
 				Submit
 			</button>
 
@@ -58,8 +52,6 @@ const Form2 = ({ fetchStr, description }) => {
 					{answer}
 				</p>
 			)}
-
-			{loading ? <Loader /> : ''}
 		</div>
 	);
 };
