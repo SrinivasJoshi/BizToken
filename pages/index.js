@@ -1,5 +1,6 @@
 import Card from '../components/Card';
-import Form from '../components/Form';
+import Form1 from '../components/Form1';
+import Form2 from '../components/Form2';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 function HomePage() {
@@ -15,14 +16,8 @@ function HomePage() {
 				<Card fetchStr='Hourly token dispersal' />
 			</div>
 			<div className='flex flex-col md:flex-row justify-around items-center mt-5 md:mt-0'>
-				<Form
-					fetchStr='Faucet'
-					description='Enter your wallet address to receive BIZ Token'
-				/>
-				<Form
-					fetchStr='Check Balance'
-					description='Enter your wallet address to know your BIZ Token balance'
-				/>
+				<Form1 />
+				<Form2 />
 			</div>
 		</section>
 	);
